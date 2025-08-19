@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -29,13 +30,14 @@ public class Facture {
     // Relation ManyToOne avec Client
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_client", nullable = false)
+    @JsonIgnore
     private Client client;
 
     // Relation OneToMany avec LigneFacture
     @OneToMany(mappedBy = "facture", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<LigneFacture> lignes;
 
-    // Champs calculés automatiquement
+
     @Column
     @Builder.Default
     private Float totalHT = 0f;
@@ -54,6 +56,19 @@ public class Facture {
         this.client = client;
         this.date = date;
     }
+    public void calculateTotalHT() {
+        totalHT = 0f;
+        totalTVA = 0f;
+        totalTTC = 0f;
 
+        if (lignes != null) {
+            for (LigneFacture ligne : lignes) {
+                float ligneHT = ligne.getPrixUnitaireHT() * ligne.getQuantite();
+                this.totalHT += ligneHT;
+                this.totalTVA += ligneHT * ligne.getTauxTVA();
+            }
+            this.totalTTC = this.totalHT + this.totalTVA;
+        }
+    }
 
 }
