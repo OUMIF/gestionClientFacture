@@ -31,18 +31,13 @@ public class FactureController {
         this.clientService = clientService;
     }
 
-    /**
-     * Liste de toutes les factures
-     */
+
     @GetMapping
     public ResponseEntity<List<Facture>> getAllFactures() {
         List<Facture> factures = factureService.getAll();
         return ResponseEntity.ok(factures);
     }
 
-    /**
-     * Détail d'une facture par son ID
-     */
     @GetMapping("/{id}")
     public ResponseEntity<Facture> getFactureById(@PathVariable Integer id) {
         return factureService.getById(id)
@@ -50,9 +45,6 @@ public class FactureController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Création d'une nouvelle facture
-     */
     @PostMapping
     public ResponseEntity<?> createFacture(@RequestBody Facture facture) {
         // Validation : facture doit avoir au moins une ligne
@@ -92,9 +84,6 @@ public class FactureController {
         return ResponseEntity.status(HttpStatus.CREATED).body(savedFacture);
     }
 
-    /**
-     * Export JSON d'une facture complète
-     */
     @GetMapping("/{id}/export")
     public ResponseEntity<?> exportFacture(@PathVariable Integer id) {
         return factureService.getById(id)
@@ -138,9 +127,6 @@ public class FactureController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Suppression d'une facture
-     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteFacture(@PathVariable Integer id) {
         if (factureService.getById(id).isPresent()) {
@@ -150,9 +136,6 @@ public class FactureController {
         return ResponseEntity.notFound().build();
     }
 
-    /**
-     * Validation d'une ligne de facture
-     */
     private boolean isLigneValide(LigneFacture ligne) {
         return ligne.getDescription() != null && !ligne.getDescription().trim().isEmpty()
                 && ligne.getQuantite() != null && ligne.getQuantite() > 0

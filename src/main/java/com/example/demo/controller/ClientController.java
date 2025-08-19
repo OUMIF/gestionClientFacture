@@ -8,9 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * Controller REST pour la gestion des clients
- */
+
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
@@ -54,26 +52,24 @@ public class ClientController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<Client> updateClient(@PathVariable Integer id, @RequestBody Client clientDetails) {
+    public ResponseEntity<Client> updateClient(@PathVariable Integer id, @RequestBody Client clientnv) {
         return clientService.getById(id)
                 .map(client -> {
-                    if (clientDetails.getNom() != null) {
-                        client.setNom(clientDetails.getNom());
+                    if (clientnv.getNom() != null) {
+                        client.setNom(clientnv.getNom());
                     }
-                    if (clientDetails.getEmail() != null) {
-                        client.setEmail(clientDetails.getEmail());
+                    if (clientnv.getEmail() != null) {
+                        client.setEmail(clientnv.getEmail());
                     }
-                    if (clientDetails.getSiret() != null) {
-                        client.setSiret(clientDetails.getSiret());
+                    if (clientnv.getSiret() != null) {
+                        client.setSiret(clientnv.getSiret());
                     }
                     return ResponseEntity.ok(clientService.save(client));
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    /**
-     * Suppression d'un client
-     */
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteClient(@PathVariable Integer id) {
         if (clientService.getById(id).isPresent()) {
