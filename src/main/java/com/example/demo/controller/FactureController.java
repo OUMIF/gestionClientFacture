@@ -90,18 +90,18 @@ public class FactureController {
                 .map(facture -> {
                     Map<String, Object> export = new HashMap<>();
 
-                    // Informations de la facture
+                    // Informations de la facture j'utulise map pour klé + valeur
                     export.put("numeroFacture", facture.getIdFacture());
                     export.put("date", facture.getDate());
 
-                    // Informations client
+                    // Informations client ici de meme
                     Map<String, Object> clientInfo = new HashMap<>();
                     clientInfo.put("nom", facture.getClient().getNom());
                     clientInfo.put("email", facture.getClient().getEmail());
                     clientInfo.put("siret", facture.getClient().getSiret());
                     export.put("client", clientInfo);
 
-                    // Lignes de la facture
+                    // Lignes de la facture ici de meme
                     List<Map<String, Object>> lignesExport = facture.getLignes().stream()
                             .map(ligne -> {
                                 Map<String, Object> ligneMap = new HashMap<>();
