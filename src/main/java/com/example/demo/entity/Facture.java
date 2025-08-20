@@ -49,9 +49,7 @@ public class Facture {
     @Builder.Default
     private Float totalTTC = 0f;
 
-    /**
-     * Constructeur pour créer une facture avec client et date
-     */
+
     public Facture(Client client, LocalDate date) {
         this.client = client;
         this.date = date;
